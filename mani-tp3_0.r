@@ -29,6 +29,7 @@ res10000 <- generateData(10000)
 pca_res100 <- prcomp(res100)
 pca_res1000 <- prcomp(res1000) 
 pca_res10000 <- prcomp(res10000)
+summary(pca_res100)
 ## 3. Correlation Dimension Estimator ####
 corrDim <- function(data, epsilon = 10^seq(-2, 1, length.out = 100)){
   n <- nrow(data)
@@ -37,17 +38,13 @@ corrDim <- function(data, epsilon = 10^seq(-2, 1, length.out = 100)){
   for (i in 1:(n-2)){
     dn <- c(dn, sqrt(colSums(apply(data[(i+1):n,], 1, function(j) (j-data[i,]))^2)))
   }
-  dn <- c(dn, c(dn, sqrt(sum((data[n]-data[n-1])^2))))
+  dn <- c(dn, sqrt(sum((data[n]-data[n-1])^2)))
   for (e in 1:length(epsilon)){
     C[e] <- sum(dn <= epsilon[e])
   }
   C <- C*2/(n*(n-1))
   return (list(epsilon=epsilon, C=C))
 }
-
-
-
-
 
 
 derivate <- function(x, y) {
